@@ -1,0 +1,46 @@
+.wrapper {
+  max-width: 1024px;
+  background: #dddddd;
+  padding: 20px 0;
+  margin: auto;
+}
+
+.timers {
+  width: 100%;
+  min-height: 20px;
+  padding: 10px;
+  &-wrap {
+    width: 100%;
+    min-height: 200px;
+    background: #cccccc;
+  }
+}
+.separator {
+  width: 100%;
+  height: 2px;
+  background: blue;
+}
+
+.btn {
+  &-dismiss {
+    padding: 2px 3px;
+    margin-bottom: 4px;
+    margin-right: 8px;
+    background: #fff;
+  }
+  &-add {
+    margin: 10px;
+    background: #72cc72;
+    color: #000000;
+  }
+}
+.title {
+  &-msg {
+    padding: 10px;
+    font-size: 20px;
+  }
+}
+.actualTime {
+  margin-left: 10px;
+  font-weight: 700;
+}
