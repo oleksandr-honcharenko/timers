@@ -1,6 +1,7 @@
 /* eslint-disable */
 import { sortBy } from 'lodash';
 
+export const STEP = 0.04;
 export const DEFAULT_QUERY = 'react';
 export const DEFAULT_HPP = '6';
 

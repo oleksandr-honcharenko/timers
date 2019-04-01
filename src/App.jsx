@@ -1,177 +1,132 @@
-/* eslint-disable */
+/* eslint-disable no-console */
 import React, { Component } from 'react';
 import Timer from './components/Timer';
+import randomNumber from './helpers/random';
 import './styles/main.scss';
 import {
-  DEFAULT_QUERY,
+  STEP,
 } from './constants/constants';
 
-function rnd(min, max) {
-  return Math.floor(Math.random() * (max + 1 - min)) + min;
-}
-
-// class Timer extends Component {
-//   state = {
-//     x : rnd(2,12),
-//     next : undefined,
-//   };
-
-//   componentDidMount() {
-//     var z =  setInterval(this.refresh, 100);
-//     console.log(this.state.x);
-//   }
-
-
-//   refresh = () => {
-//     let prevs = this.state.x - 1/10;
-//     this.setState({ x: prevs });
-//   }
-
-//   render() {
-//     const {
-//       x = rnd(24,36),
-//     } = this.state;
-//     return (
-//       <span>
-//         {parseFloat(x).toFixed(2)}
-//         <br/>
-//       </span>
-//     );
-//   }
-// }
-
-class timer {
-  constructor(time = 6, working = true) {
-      this.time = time;
-      this.working = working;
-  }
-}
-
-let timers = [];
-// timers.push(
-//   new timer(rnd(4,8)),
-//   new timer(rnd(4,8)),
-//   new timer(rnd(4,8))
-// );
-// console.log(timers);
-const step = 0.04;
-let allert = 'Waiting...';
-
-const notWorkingTimer = (item) => {
-  return item.working
-}
+let timersTicking;
 
 class App extends Component {
   state = {
-    title: allert,
-    timers: timers
+    title: 'Waiting...',
+    timers: [],
   };
 
   componentDidMount() {
-    setInterval(this.refresh, 25);
+    timersTicking = setInterval(this.refresh, 25);
+  }
+
+  componentWillUnmount() {
+    clearInterval(timersTicking);
+    // console.log('The End');
   }
 
   refresh = () => {
-    let cat = [...this.state.timers];
-    let alarm = "old";
-    const pp = function () {
-        cat = cat.map(function(z, nimber) {
-            if (z.working === false) {
-                return z
-            }
-            let newProp = parseFloat(z.time - step).toFixed(2);
-            if (newProp <= 0) {
-                alarm = `Timer ${nimber + 1} finished at ` + Date();
-                return new timer(0, false)
-            }
-            return new timer(newProp);
-        });
+    let timersUpdatedArray = [...this.state.timers];
+    let alarm = 'old';
+    const refreshTimersArray = () => {
+      timersUpdatedArray = timersUpdatedArray.map((item, itemNumber) => {
+        if (item.working === false) {
+          return item;
+        }
+        const newTime = parseFloat(item.time - STEP).toFixed(2);
+        if (newTime <= 0) {
+          alarm = `Timer ${itemNumber + 1} finished at ${Date()}`;
+          return new Timer(0, false);
+        }
+        return new Timer(newTime);
+      });
     };
-    pp();
-    if (alarm === "old") {
-      this.setState({ timers: cat })
+    refreshTimersArray();
+    if (alarm === 'old') {
+      this.setState({ timers: timersUpdatedArray });
     } else {
-      this.setState({ title: alarm ,timers: cat })
+      this.setState({ title: alarm, timers: timersUpdatedArray });
     }
   }
 
-  //componentWillUnmount() {}
-
-  chlen = () => {
-    const dog = [...this.state.timers];
-    dog.push(new timer(rnd(6,12)));
-    this.setState({ timers: dog })
+  addOneTimer = () => {
+    const { timers: timersUpdatedArray } = this.state;
+    timersUpdatedArray.push(new Timer(randomNumber(6, 12)));
+    this.setState({ timers: timersUpdatedArray });
   }
 
-  chlenDoKolen = () => {
-    const dog = [...this.state.timers];
-    for ( let i = 0 ; i < 10 ; i++ ) {
-      dog.push(new timer(rnd(6,12)));
+  addTenTimers = () => {
+    const { timers: timersUpdatedArray } = this.state;
+    for (let i = 0; i < 10; i += 1) {
+      timersUpdatedArray.push(new Timer(randomNumber(6, 12)));
     }
-    this.setState({ timers: dog })
+    this.setState({ timers: timersUpdatedArray });
   }
 
   onDismiss = (i) => {
-    const sheep = [...this.state.timers];
-    sheep[i].working = false;
+    const { timers: timersUpdatedArray } = this.state;
+    timersUpdatedArray[i].working = false;
 
-    const hsdkgj = `Timer ${i + 1} canceled at ` + Date();
-    this.setState({ title: hsdkgj,timers: sheep })
+    const cancellationTitle = `Timer ${i + 1} canceled at ${Date()}`;
+    this.setState({ title: cancellationTitle, timers: timersUpdatedArray });
   }
 
   render() {
     const {
       title,
-      timers
+      timers,
     } = this.state;
-
 
     return (
       <div className="timers-wrap">
-        <h4 className="title-msg">Status: {title}</h4>
-        <div className="separator"></div>
+        <h4 className="title-msg">
+          {`Status: ${title}`}
+        </h4>
+        <div className="separator" />
         <button
+          type="button"
           className="btn-add"
-          onClick={() => this.chlen()}
+          onClick={() => this.addOneTimer()}
         >
           Add 1 timer
         </button>
         <button
+          type="button"
           className="btn-add"
-          onClick={() => this.chlenDoKolen()}
+          onClick={() => this.addTenTimers()}
         >
           Add 10 timers
         </button>
-        <div className="separator"></div>
+        <div className="separator" />
         <div className="timers">
           {
-            timers.map((item, i) => {
+            timers.map((item, itemNumber) => {
               if (item.working === false) {
-                return
+                return null;
               }
               return (
-              <div key = {i} className="timer">
-                <button className="btn-dismiss"
-                   onClick={() => this.onDismiss(i)}
-                >
-                  {`X`}
-                </button>
-                <span>
-                  Timer №{i + 1}
-                  <span className="actualTime">
-                    {item.time}
+                // eslint-disable-next-line react/no-array-index-key
+                <div key={itemNumber} className="timer">
+                  <button
+                    type="button"
+                    className="btn-dismiss"
+                    onClick={() => this.onDismiss(itemNumber)}
+                  >
+                    {'X'}
+                  </button>
+                  <span>
+                    {`Timer №${itemNumber + 1}`}
+                    <span className="actualTime">
+                      {item.time}
+                    </span>
                   </span>
-                </span>                  
-              </div>
-              )})
-            
+                </div>
+              );
+            })
           }
         </div>
       </div>
     );
   }
 }
-
-
 
 export default App;
