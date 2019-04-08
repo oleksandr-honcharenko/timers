@@ -1,11 +1,13 @@
 // /* eslint-disable no-console */
 import React, { Component } from 'react';
 import Timer from './components/Timer';
+import TimersField from './components/TimersField';
 import Button from './components/Button';
 import randomNumber from './helpers/utilits';
 import './styles/main.scss';
 import {
   STEP,
+  TIME,
 } from './constants/constants';
 
 let timersTicking;
@@ -17,7 +19,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    timersTicking = setInterval(this.refresh, 40);
+    timersTicking = setInterval(this.refresh, TIME);
   }
 
   componentWillUnmount() {
@@ -36,7 +38,7 @@ class App extends Component {
         const newTime = parseFloat(item.time - STEP).toFixed(2);
         if (newTime <= 0) {
           alarm = `Timer ${itemNumber + 1} finished at ${Date()}`;
-          return new Timer(0, false);
+          return new Timer('0', false);
         }
         return new Timer(newTime);
       });
@@ -51,14 +53,14 @@ class App extends Component {
 
   addOneTimer = () => {
     const { timers: timersUpdatedArray } = this.state;
-    timersUpdatedArray.push(new Timer(randomNumber(6, 12)));
+    timersUpdatedArray.push(new Timer(parseFloat(randomNumber(6, 12)).toFixed(2)));
     this.setState({ timers: timersUpdatedArray });
   }
 
   addTenTimers = () => {
     const { timers: timersUpdatedArray } = this.state;
     for (let i = 0; i < 10; i += 1) {
-      timersUpdatedArray.push(new Timer(randomNumber(6, 12)));
+      timersUpdatedArray.push(new Timer(parseFloat(randomNumber(6, 12)).toFixed(2)));
     }
     this.setState({ timers: timersUpdatedArray });
   }
@@ -96,36 +98,10 @@ class App extends Component {
           Add 10 timers
         </Button>
         <div className="separator" />
-        {/* <TimersField
+        <TimersField
           timers={timers}
-          onClick={this.onClick}
-        /> */}
-        <div className="timers">
-          {
-            timers.map((item, itemNumber) => {
-              if (item.working === false) {
-                return null;
-              }
-              return (
-                // eslint-disable-next-line react/no-array-index-key
-                <div key={itemNumber} className="timer">
-                  <Button
-                    className="btn-dismiss"
-                    onClick={() => this.onDismiss(itemNumber)}
-                  >
-                    X
-                  </Button>
-                  <span>
-                    {`Timer №${itemNumber + 1}`}
-                    <span className="actualTime">
-                      {item.time}
-                    </span>
-                  </span>
-                </div>
-              );
-            })
-          }
-        </div>
+          onClick={itemNumber => this.onDismiss(itemNumber)}
+        />
       </div>
     );
   }
