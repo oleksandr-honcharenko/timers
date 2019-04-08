@@ -1,7 +1,8 @@
-/* eslint-disable no-console */
+// /* eslint-disable no-console */
 import React, { Component } from 'react';
 import Timer from './components/Timer';
-import randomNumber from './helpers/random';
+import Button from './components/Button';
+import randomNumber from './helpers/utilits';
 import './styles/main.scss';
 import {
   STEP,
@@ -16,7 +17,7 @@ class App extends Component {
   };
 
   componentDidMount() {
-    timersTicking = setInterval(this.refresh, 25);
+    timersTicking = setInterval(this.refresh, 40);
   }
 
   componentWillUnmount() {
@@ -82,21 +83,23 @@ class App extends Component {
           {`Status: ${title}`}
         </h4>
         <div className="separator" />
-        <button
-          type="button"
+        <Button
           className="btn-add"
           onClick={() => this.addOneTimer()}
         >
           Add 1 timer
-        </button>
-        <button
-          type="button"
+        </Button>
+        <Button
           className="btn-add"
           onClick={() => this.addTenTimers()}
         >
           Add 10 timers
-        </button>
+        </Button>
         <div className="separator" />
+        {/* <TimersField
+          timers={timers}
+          onClick={this.onClick}
+        /> */}
         <div className="timers">
           {
             timers.map((item, itemNumber) => {
@@ -106,13 +109,12 @@ class App extends Component {
               return (
                 // eslint-disable-next-line react/no-array-index-key
                 <div key={itemNumber} className="timer">
-                  <button
-                    type="button"
+                  <Button
                     className="btn-dismiss"
                     onClick={() => this.onDismiss(itemNumber)}
                   >
-                    {'X'}
-                  </button>
+                    X
+                  </Button>
                   <span>
                     {`Timer №${itemNumber + 1}`}
                     <span className="actualTime">
