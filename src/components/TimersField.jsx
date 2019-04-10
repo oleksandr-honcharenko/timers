@@ -1,4 +1,3 @@
-// /* eslint-disable */
 import React from 'react';
 import PropTypes from 'prop-types';
 import Button from './Button';
@@ -12,7 +11,7 @@ const propTypes = {
 };
 
 const defaultProps = {
-  onClick: PropTypes.func,
+  onClick: () => {},
   timers: [],
 };
 
@@ -30,9 +29,8 @@ const TimersField = ({ timers, onClick }) =>
               <Button
                 className="btn-dismiss"
                 onClick={() => onClick(itemNumber)}
-              >
-                {'X'}
-              </Button>
+                caption="X"
+              />
               <span>
                 {`Timer №${itemNumber + 1}`}
                 <span className="actualTime">

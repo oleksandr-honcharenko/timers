@@ -1,4 +1,3 @@
-// /* eslint-disable no-console */
 import React, { Component } from 'react';
 import Timer from './components/Timer';
 import TimersField from './components/TimersField';
@@ -24,7 +23,6 @@ class App extends Component {
 
   componentWillUnmount() {
     clearInterval(timersTicking);
-    // console.log('The End');
   }
 
   refresh = () => {
@@ -87,16 +85,15 @@ class App extends Component {
         <div className="separator" />
         <Button
           className="btn-add"
-          onClick={() => this.addOneTimer()}
-        >
-          Add 1 timer
-        </Button>
+          onClick={this.addOneTimer}
+          caption="Add 1 timer"
+        />
         <Button
           className="btn-add"
           onClick={() => this.addTenTimers()}
-        >
-          Add 10 timers
-        </Button>
+          caption="Add 10 timers"
+        />
+
         <div className="separator" />
         <TimersField
           timers={timers}
